@@ -159,4 +159,131 @@ public class Matrix {
             System.out.print("\n");
         }
     }
+
+/*  Experimental code section */
+public Matrix REF() {
+        double[][] matrix = this.arrayVersion;
+        double[][] Ltempz = new double[matrixRows][matrixRows];
+
+        for(int i = 0; i < matrixRows; i++) {
+            for (int j = 0; j < matrixRows; j++) {
+                if (i == j) {
+                    Ltempz[i][j] = 1;
+                }
+
+                if (j > i) {
+                    Ltempz[i][j] = 0;
+                }
+            }
+        }
+
+        this.Lvalues = new double[100];
+
+        int test = 0;
+        int recursL = test;
+
+        for (int i = 0; i < matrixRows-1; i++) {
+            int max = i;
+            for (int j = i + 1; j < matrixRows-1; j++) {
+                if (Math.abs(matrix[j][i]) > Math.abs(matrix[max][i])) {
+                    max = j;
+                }
+            }
+            matrix[i] = matrix[max];
+            matrix[max] = matrix[i];
+            if (Math.abs(matrix[i][i]) <= 1/(Math.pow(10, 10))) {
+                return null;
+            }
+
+            for (int k = i + 1; k < matrixRows; k++) {
+                double temp = (matrix[k][i])/(matrix[i][i]);
+                Lvalues[recursL] = temp;
+                //System.out.println(Lvalues[recursL]);
+                recursL++;
+                //System.out.println(temp);
+                for (int z = i; z < matrixColumns; z++) {
+                    matrix[k][z] -= matrix[i][z] * temp;
+                }
+            }
+        }
+
+        for (int i1 = matrixRows - 1; i1 > -1; i1--) {
+            double temp2 = matrix[i1][i1];
+//          System.out.println(temp2);
+            for(int j = 0; j < i1; j++) {
+
+            }
+            //matrix[i1][i1] /= temp2;
+
+
+            for (int k = matrixRows; k < matrixColumns; k++) {
+                matrix[i1][k] /= temp2;
+            }
+        }
+
+
+
+        Matrix newMatrix = new Matrix(matrix);
+        return newMatrix;
+    }
+
+    public Matrix getL() {
+        Matrix U = this.REF();
+        for(int z = 0; z < matrixRows; z++) {
+            //System.out.println(Lvalues[z]);
+        }
+
+        double[][] Ltemp = new double[this.matrixRows][this.matrixColumns];
+        for (int i = 0; i < matrixRows; i++) {
+            for (int j = 0; j < matrixColumns; j++) {
+                if (i == j) {
+                    Ltemp[i][j] = 1;
+                }
+            }
+        }
+        for (int i = 1; i < matrixRows; i++) {
+            for (int j = 0; j < matrixRows - 1; j++) {
+                int k = i - 1 + j;
+                Ltemp[i][j] = Lvalues[i];
+
+                if(i == j) {
+                    Ltemp[i][j] = 1;
+                }
+            }
+        }
+        System.out.println("L: ");
+        Matrix L = new Matrix(Ltemp);
+        L.display();
+        return L;
+    }
+    public Matrix getL2() {
+        double[][] Ltemp = new double[this.matrixRows][this.matrixColumns];
+
+        for (int k = 0; k < matrixColumns; k++) {
+            for (int i = 0; i < matrixColumns; i++) {
+                for (int j = 0; j < matrixColumns; j++) {
+                    if (i > j) {
+                        Ltemp[i][j] = Lvalues[k];
+                    }
+                }
+            }
+        }
+    }
+
+    public Matrix getU() {
+        Matrix U = this.REF();
+        this.U = U;
+        System.out.println("U: ");
+        U.display();
+
+        return U;
+    }
+
+    public void lu_decomposition() {
+        getU();
+        getL2();
+
+    }
+
+
 }
