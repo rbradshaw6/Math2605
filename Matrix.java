@@ -150,4 +150,13 @@ public class Matrix {
 
         return newMatrix;
     }
+
+    private void display() {
+        for (int i1 = 0; i1 < this.matrixRows; i1++) { //display
+            for (int j1 = 0; j1 < this.matrixColumns; j1++) {
+                System.out.print(this.Matrix1[i1][j1] + "\t");
+            }
+            System.out.print("\n");
+        }
+    }
 }
