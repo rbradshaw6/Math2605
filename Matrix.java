@@ -219,19 +219,16 @@ public Matrix REF() {
     }
 
     public Matrix inverse() {
-        return inverse(this);
-    }
-    public static Matrix inverse(Matrix m) {
-        if (m.matrixRows != m.matrixColumns) { throw new IllegalArgumentException("Matrix must be square!"); }
-        double[][] newArr = new double[m.matrixRows][m.matrixColumns * 2];
-        for (int i = 0; i < m.matrixRows; i++) {
-            for (int j = 0; j < m.matrixColumns; j++) {
-                newArr[i][j] = m.Matrix1[i][j];
+        if (matrixRows != matrixColumns) { throw new IllegalArgumentException("Matrix must be square!"); }
+        double[][] newArr = new double[matrixRows][matrixColumns * 2];
+        for (int i = 0; i < matrixRows; i++) {
+            for (int j = 0; j < matrixColumns; j++) {
+                newArr[i][j] = Matrix1[i][j];
             }
         }
         for (int i = 0; i< newArr.length; i++) {
-            for (int j = m.matrixColumns; j < newArr[0].length; j++) {
-                if (i == j - m.matrixColumns) {
+            for (int j = matrixColumns; j < newArr[0].length; j++) {
+                if (i == j - matrixColumns) {
                     newArr[i][j] = 1;
                 } else {
                     newArr[i][j] = 0;
@@ -290,10 +287,10 @@ public Matrix REF() {
                 matrix[i1][k] /= temp2;
             }
         }
-        double[][] n = new double[m.matrixRows][m.matrixColumns];
-        for (int i = 0; i < m.matrixRows; i++) {
-            for (int j = 0; j < m.matrixColumns; j++) {
-                n[i][j] = matrix[i][j + m.matrixColumns];
+        double[][] n = new double[matrixRows][matrixColumns];
+        for (int i = 0; i < matrixRows; i++) {
+            for (int j = 0; j < matrixColumns; j++) {
+                n[i][j] = matrix[i][j + matrixColumns];
             }
         }
         Matrix neo = new Matrix(n);
@@ -395,11 +392,43 @@ public Matrix REF() {
         l.inverse().display();
 
     }
+
+    public double determinant() {
+        if (matrixRows != matrixColumns) {
+            throw new IllegalArgumentException("Matrix must be square!");
+        }
+        if (matrixRows == 1) {
+            return arrayVersion[0][0];
+        } else if (matrixRows == 2) {
+            return ((arrayVersion[0][0] * arrayVersion[1][1]) - (arrayVersion[1][0] * arrayVersion[0][1]));
+        } else {
+            double sum = 0.0;
+            int i = 0;
+            for (int j=0; j < matrixRows; j++) {
+                double[][] temp = new double[matrixRows-1][matrixColumns-1];
+                for (int i2=0, i3=0; i2 < matrixRows; i2++) {
+                    for (int j2=0, j3=0; j2 < matrixColumns; j2++) {
+                        if (i2 != i && j2 != j) {
+                            temp[i3][j3] = arrayVersion[i2][j2];
+                            j3++;
+                        }
+                    }
+                    if (i2 != i) {
+                        i3++;
+                    }
+                }
+                Matrix tempm = new Matrix(temp);
+                sum += Math.pow(-1, i + j) * tempm.determinant() * arrayVersion[i][j];
+            }
+            return sum;
+        }
+    }
+
     public static void main(String[] args) {
         double[][] m1 = {{1, 2, 4}, {3, 8, 14}, {2, 6, 14}};
-        double[][] m2 = {{1, -2, -2, -3}, {3, -9, 0, -9}, {-1, 2, 4, 7}, {-3, -6, 26, 2}};
+        //double[][] m2 = {{1, -2, -2, -3}, {3, -9, 0, -9}, {-1, 2, 4, 7}, {-3, -6, 26, 2}};
         Matrix m = new Matrix(m1);
-        m.lu_decomposition();
+        //m.lu_decomposition();
 //        double[][] m3 = {{1, 2}, {3, 4}, {3, 2}};
 //        double[][] m4 = {{4, -1}, {5, 0}};
 //        Matrix matrix3 = new Matrix(m3);
@@ -410,6 +439,8 @@ public Matrix REF() {
         // Matrix matrix6 = matrix5.inverse();
         // System.out.println("***");
         // matrix6.display();
+        m.display();
+        System.out.println(m.determinant());
     }
 
 }
