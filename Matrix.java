@@ -98,6 +98,19 @@ public class Matrix {
             return transposeMatrix;
        }
 
+       public Vector matrixVectorMult(Vector v) {
+           double[][] mPlaceholder = new double[v.length][1];
+           for (int i = i; i < v.length; i++) {
+               mPlaceholder[i][1] = v.array[i];
+           }
+           Matrix result = matrixMultiplier(new Matrix(mPlaceholder));
+           double[] newVector = new double[v.length];
+           for (int i = 0; i < v.length; i++) {
+               newVector[i] = result.arrayVersion[i][1];
+           }
+           return new Vector(newVector)
+       }
+
      //http://www.programiz.com/python-programming/examples/multiply-matrix used to troubleshoot triple for loop
     public Matrix matrixMultiplier(Matrix secondMatrix) {
         if (this.matrixColumns != secondMatrix.matrixRows) {
