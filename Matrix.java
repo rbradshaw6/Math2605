@@ -91,24 +91,20 @@ public class Matrix {
 
             this.transposeMatrix = new Matrix(transposeArray);
 
-            System.out.println(" Transpose Matrix:\n");
-
-            transposeMatrix.display();
-
             return transposeMatrix;
        }
 
        public Vector matrixVectorMult(Vector v) {
            double[][] mPlaceholder = new double[v.length][1];
-           for (int i = i; i < v.length; i++) {
-               mPlaceholder[i][1] = v.array[i];
+           for (int i = 0; i < v.length; i++) {
+               mPlaceholder[i][1] = v.vector[i];
            }
            Matrix result = matrixMultiplier(new Matrix(mPlaceholder));
            double[] newVector = new double[v.length];
            for (int i = 0; i < v.length; i++) {
                newVector[i] = result.arrayVersion[i][1];
            }
-           return new Vector(newVector)
+           return new Vector(newVector);
        }
 
      //http://www.programiz.com/python-programming/examples/multiply-matrix used to troubleshoot triple for loop
@@ -435,6 +431,37 @@ public Matrix REF() {
             }
             return sum;
         }
+                
+    }
+    
+    public double getNorm() {
+    	Matrix a = this;
+    	Matrix b = this.transpose();
+    	
+    	Matrix c = a.matrixMultiplier(b);
+    	double yolo = c.trace();
+    	double yolosqrt = Math.sqrt(yolo);
+    	System.out.println(yolosqrt);
+    	return yolosqrt;
+    	
+    }
+    
+    public double trace() {
+    	double[][] matrix = this.arrayVersion;
+    	
+    	double sum = 0;
+    	for (int i = 0; i < matrixRows; i++) {
+    		for (int j = 0; j < matrixColumns; j++) {
+    			if (i == j) {
+    				sum += matrix[i][j];
+    			}
+    		}
+    	}
+    	return sum;
+    }
+    
+    public double[] getEigenvalues() {
+    	
     }
 
     public static void main(String[] args) {
@@ -453,7 +480,7 @@ public Matrix REF() {
         // System.out.println("***");
         // matrix6.display();
         m.display();
-        System.out.println(m.determinant());
+        System.out.println(m.getNorm());
     }
 
 }
