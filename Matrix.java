@@ -400,7 +400,83 @@ public Matrix REF() {
 
     }
     
+    public void qr_fact_househ() {
+        double[] rd = new double[matrixColumns];
+        double[][] QR = Matrix1;
+        for (int i = 0; i < matrixColumns; i++) {
+           double k = 0;
+           for(int j = i; j < matrixRows; j++) {
+               k = Math.hypot(k, QR[j][i]);
+           }
+           
+           if (k != 0.0) {
+               if (QR[i][i] < 0) {
+                   k = -k;
+                }
+                for (int j = i; j < matrixRows; j++) {
+                   QR[j][i] /= k;
+                }
+                QR[i][i] += 1.0;
+              
+               
+               for (int l = i+1; l < matrixColumns; l++) {
+                   double s = 0.0; 
+                   for (int j = i; j < matrixRows; j++) {
+                      s += QR[j][i]*QR[j][i];
+                   }
+                   s = -s/QR[i][i];
+                   for (int j = i; j < matrixRows; j++) {
+                      QR[j][i] += s*QR[j][i];
+                   }
+                }
+            }
+           rd[i] = -k;
+        }
+        
+        Matrix X = new Matrix(matrixRows, matrixColumns);
+        double[][] Q = X.Matrix1;
+        for (int k = matrixColumns-1; k >= 0; k--) {
+           for (int i = 0; i < matrixRows; i++) {
+              Q[i][k] = 0.0;
+           }
+           Q[k][k] = 1.0;
+           for (int j = k; j < matrixColumns; j++) {
+              if (QR[k][k] != 0) {
+                 double s = 0.0;
+                 for (int i = k; i < matrixRows; i++) {
+                    s += QR[i][k]*Q[i][j];
+                 }
+                 s = -s/QR[k][k];
+                 for (int i = k; i < matrixRows; i++) {
+                    Q[i][j] += s*QR[i][k];
+                 }
+              }
+           }
+        }
+        System.out.println("Q is:");
+        X.display();
+        
+        X = new Matrix(matrixColumns, matrixColumns);
+        double[][] R = X.Matrix1;
+        for (int i = 0; i < matrixColumns; i++) {
+           for (int j = 0; j < matrixColumns; j++) {
+              if (i < j) {
+                 R[i][j] = QR[i][j];
+              } else if (i == j) {
+                 R[i][j] = rd[i];
+              } else {
+                 R[i][j] = 0.0;
+              }
+           }
+        }
+        System.out.println("R is:");
+        X.display();
+           
+    }
     
+    public void qr_fact_givens() {
+        
+    }
     
     public double determinant() {
         if (matrixRows != matrixColumns) {
