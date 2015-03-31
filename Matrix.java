@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.Random;
 
 public class Matrix {
     protected double[][] arrayVersion;
@@ -97,12 +98,12 @@ public class Matrix {
        public Vector matrixVectorMult(Vector v) {
            double[][] mPlaceholder = new double[v.length][1];
            for (int i = 0; i < v.length; i++) {
-               mPlaceholder[i][1] = v.vector[i];
+               mPlaceholder[i][0] = v.vector[i];
            }
            Matrix result = matrixMultiplier(new Matrix(mPlaceholder));
            double[] newVector = new double[v.length];
            for (int i = 0; i < v.length; i++) {
-               newVector[i] = result.arrayVersion[i][1];
+               newVector[i] = result.arrayVersion[i][0];
            }
            return new Vector(newVector);
        }
@@ -130,10 +131,7 @@ public class Matrix {
             }
 
 
-            System.out.println("\n Multiplied Matrix");
             Matrix multipliedMatrix = new Matrix(resultantMatrix);
-
-            multipliedMatrix.display();
             return multipliedMatrix;
 
         }
@@ -401,7 +399,9 @@ public Matrix REF() {
         l.inverse().display();
 
     }
-
+    
+    
+    
     public double determinant() {
         if (matrixRows != matrixColumns) {
             throw new IllegalArgumentException("Matrix must be square!");
@@ -441,14 +441,13 @@ public Matrix REF() {
     	Matrix c = a.matrixMultiplier(b);
     	double yolo = c.trace();
     	double yolosqrt = Math.sqrt(yolo);
-    	System.out.println(yolosqrt);
+    	System.out.println("Norm of matrix:" + yolosqrt);
     	return yolosqrt;
     	
     }
     
     public double trace() {
     	double[][] matrix = this.arrayVersion;
-    	
     	double sum = 0;
     	for (int i = 0; i < matrixRows; i++) {
     		for (int j = 0; j < matrixColumns; j++) {
@@ -460,12 +459,63 @@ public Matrix REF() {
     	return sum;
     }
     
-    public double[] getEigenvalues() {
+    public void power_method() {
+    	Matrix matrix = this;
+    	double[] randomVector = new double[matrixRows];
     	
+    	Random rand = new Random(); //creating the first random vector
+    	for (int i = 0; i < matrixRows; i++) {
+    		double randomValue = rand.nextDouble();
+    		randomVector[i] = randomValue;
+    	}
+    	
+    	Vector[] steps = new Vector[10001];
+    	
+    	double[] u = randomVector;
+    	Vector uu = new Vector(u);
+    	Vector mult = matrix.matrixVectorMult(uu);
+    	double[] g = mult.vector;
+    	steps[0] = mult.multiplyByConstant(1/g[0]);
+    	
+    	for (int i = 0; i < 10000; i++) {
+    			Vector lol = matrix.matrixVectorMult(steps[i]);
+    			double[] lolz = lol.vector;
+    			Vector what = lol.multiplyByConstant(1/steps[i].vector[0]);
+    			steps[i + 1] = what;
+    	}
+    	
+    	steps[10000].display();
+    	
+    	/*
+
+    	Vector v = new Vector(randomVector);
+    	Vector iterate = matrix.matrixVectorMult(v);
+    	double[] b = iterate.vector;
+    	*/
+    	
+    	/*
+    	for (int i = 0; i < 10000; i++) {    		
+    		double mag = iterate.magnitude();
+    		
+    		for (int j = 0; j < b.length; j++) {
+    			b[j] /= b[0];
+    		}
+    	}
+    	
+    	Vector newV = new Vector(b);
+    	newV.display();
+    	*///////////////
+    }
+    
+    public double[] getEigenvalues() {
+    	return null;
     }
 
     public static void main(String[] args) {
         double[][] m1 = {{1, 2, 4}, {3, 8, 14}, {2, 6, 14}};
+        double[] b = {1,1};
+        Vector g = new Vector(b);
+        System.out.println(g.magnitude());
         //double[][] m2 = {{1, -2, -2, -3}, {3, -9, 0, -9}, {-1, 2, 4, 7}, {-3, -6, 26, 2}};
         Matrix m = new Matrix(m1);
         //m.lu_decomposition();
@@ -480,7 +530,7 @@ public Matrix REF() {
         // System.out.println("***");
         // matrix6.display();
         m.display();
-        System.out.println(m.getNorm());
+        m.power_method();
     }
 
 }
