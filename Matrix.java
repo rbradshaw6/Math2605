@@ -99,16 +99,17 @@ public class Matrix {
        }
 
        public Vector matrixVectorMult(Vector v) {
+           if (matrixColumns != v.length) { throw new IllegalArgumentException("ERROR"); }
            double[][] mPlaceholder = new double[v.length][1];
-           for (int i = i; i < v.length; i++) {
-               mPlaceholder[i][1] = v.array[i];
+           for (int i = 0; i < v.length; i++) {
+               mPlaceholder[i][0] = v.vector[i];
            }
            Matrix result = matrixMultiplier(new Matrix(mPlaceholder));
-           double[] newVector = new double[v.length];
-           for (int i = 0; i < v.length; i++) {
-               newVector[i] = result.arrayVersion[i][1];
+           double[] newVector = new double[result.matrixRows];
+           for (int i = 0; i < result.matrixRows; i++) {
+               newVector[i] = result.arrayVersion[i][0];
            }
-           return new Vector(newVector)
+           return new Vector(newVector);
        }
 
      //http://www.programiz.com/python-programming/examples/multiply-matrix used to troubleshoot triple for loop
@@ -134,10 +135,10 @@ public class Matrix {
             }
 
 
-            System.out.println("\n Multiplied Matrix");
+            //System.out.println("\n Multiplied Matrix");
             Matrix multipliedMatrix = new Matrix(resultantMatrix);
 
-            multipliedMatrix.display();
+            //multipliedMatrix.display();
             return multipliedMatrix;
 
         }

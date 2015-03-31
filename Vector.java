@@ -25,6 +25,7 @@ public class Vector {
         for (int i = 0; i < length; i++) {
             sum += vector[i] * v.vector[i];
         }
+        return sum;
     }
 
     public Vector add(Vector v) {
@@ -34,6 +35,32 @@ public class Vector {
         double[] sum = new double[length];
         for (int i = 0; i < length; i++) {
             sum[i] = vector[i] + v.vector[i];
+        }
+        return new Vector(sum);
+    }
+    public Vector subtract(Vector v) {
+        if (v.length != length) {
+            throw new IllegalArgumentException("Vectors must have same length.");
+        }
+        double[] sum = new double[length];
+        for (int i = 0; i < length; i++) {
+            sum[i] = vector[i] - v.vector[i];
+        }
+        return new Vector(sum);
+    }
+
+    public double norm() {
+        // finds the 2 norm
+        double sum = 0;
+        for (double i : vector) {
+            sum += i * i;
+        }
+        return Math.sqrt(sum);
+    }
+
+    public void display() {
+        for (double i : vector) {
+            System.out.println(i);
         }
     }
 }
