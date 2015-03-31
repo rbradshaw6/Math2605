@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.Random;
 
 public class Matrix {
     protected double[][] arrayVersion;
@@ -91,10 +92,6 @@ public class Matrix {
 
             this.transposeMatrix = new Matrix(transposeArray);
 
-            System.out.println(" Transpose Matrix:\n");
-
-            transposeMatrix.display();
-
             return transposeMatrix;
        }
 
@@ -135,10 +132,7 @@ public class Matrix {
             }
 
 
-            //System.out.println("\n Multiplied Matrix");
             Matrix multipliedMatrix = new Matrix(resultantMatrix);
-
-            //multipliedMatrix.display();
             return multipliedMatrix;
 
         }
@@ -407,6 +401,84 @@ public Matrix REF() {
 
     }
 
+    public void qr_fact_househ() {
+        double[] rd = new double[matrixColumns];
+        double[][] QR = Matrix1;
+        for (int i = 0; i < matrixColumns; i++) {
+           double k = 0;
+           for(int j = i; j < matrixRows; j++) {
+               k = Math.hypot(k, QR[j][i]);
+           }
+
+           if (k != 0.0) {
+               if (QR[i][i] < 0) {
+                   k = -k;
+                }
+                for (int j = i; j < matrixRows; j++) {
+                   QR[j][i] /= k;
+                }
+                QR[i][i] += 1.0;
+
+
+               for (int l = i+1; l < matrixColumns; l++) {
+                   double s = 0.0;
+                   for (int j = i; j < matrixRows; j++) {
+                      s += QR[j][i]*QR[j][i];
+                   }
+                   s = -s/QR[i][i];
+                   for (int j = i; j < matrixRows; j++) {
+                      QR[j][i] += s*QR[j][i];
+                   }
+                }
+            }
+           rd[i] = -k;
+        }
+
+        Matrix X = new Matrix(matrixRows, matrixColumns);
+        double[][] Q = X.Matrix1;
+        for (int k = matrixColumns-1; k >= 0; k--) {
+           for (int i = 0; i < matrixRows; i++) {
+              Q[i][k] = 0.0;
+           }
+           Q[k][k] = 1.0;
+           for (int j = k; j < matrixColumns; j++) {
+              if (QR[k][k] != 0) {
+                 double s = 0.0;
+                 for (int i = k; i < matrixRows; i++) {
+                    s += QR[i][k]*Q[i][j];
+                 }
+                 s = -s/QR[k][k];
+                 for (int i = k; i < matrixRows; i++) {
+                    Q[i][j] += s*QR[i][k];
+                 }
+              }
+           }
+        }
+        System.out.println("Q is:");
+        X.display();
+
+        X = new Matrix(matrixColumns, matrixColumns);
+        double[][] R = X.Matrix1;
+        for (int i = 0; i < matrixColumns; i++) {
+           for (int j = 0; j < matrixColumns; j++) {
+              if (i < j) {
+                 R[i][j] = QR[i][j];
+              } else if (i == j) {
+                 R[i][j] = rd[i];
+              } else {
+                 R[i][j] = 0.0;
+              }
+           }
+        }
+        System.out.println("R is:");
+        X.display();
+
+    }
+
+    public void qr_fact_givens() {
+
+    }
+
     public double determinant() {
         if (matrixRows != matrixColumns) {
             throw new IllegalArgumentException("Matrix must be square!");
@@ -436,10 +508,91 @@ public Matrix REF() {
             }
             return sum;
         }
+
+    }
+
+    public double getNorm() {
+    	Matrix a = this;
+    	Matrix b = this.transpose();
+
+    	Matrix c = a.matrixMultiplier(b);
+    	double yolo = c.trace();
+    	double yolosqrt = Math.sqrt(yolo);
+    	System.out.println("Norm of matrix:" + yolosqrt);
+    	return yolosqrt;
+
+    }
+
+    public double trace() {
+    	double[][] matrix = this.arrayVersion;
+    	double sum = 0;
+    	for (int i = 0; i < matrixRows; i++) {
+    		for (int j = 0; j < matrixColumns; j++) {
+    			if (i == j) {
+    				sum += matrix[i][j];
+    			}
+    		}
+    	}
+    	return sum;
+    }
+
+    public void power_method() {
+    	Matrix matrix = this;
+    	double[] randomVector = new double[matrixRows];
+
+    	Random rand = new Random(); //creating the first random vector
+    	for (int i = 0; i < matrixRows; i++) {
+    		double randomValue = rand.nextDouble();
+    		randomVector[i] = randomValue;
+    	}
+
+    	Vector[] steps = new Vector[10001];
+
+    	double[] u = randomVector;
+    	Vector uu = new Vector(u);
+    	Vector mult = matrix.matrixVectorMult(uu);
+    	double[] g = mult.vector;
+    	steps[0] = mult.multiplyByConstant(1/g[0]);
+
+    	for (int i = 0; i < 10000; i++) {
+    			Vector lol = matrix.matrixVectorMult(steps[i]);
+    			double[] lolz = lol.vector;
+    			Vector what = lol.multiplyByConstant(1/steps[i].vector[0]);
+    			steps[i + 1] = what;
+    	}
+
+    	steps[10000].display();
+
+    	/*
+
+    	Vector v = new Vector(randomVector);
+    	Vector iterate = matrix.matrixVectorMult(v);
+    	double[] b = iterate.vector;
+    	*/
+
+    	/*
+    	for (int i = 0; i < 10000; i++) {
+    		double mag = iterate.magnitude();
+
+    		for (int j = 0; j < b.length; j++) {
+    			b[j] /= b[0];
+    		}
+    	}
+
+    	Vector newV = new Vector(b);
+    	newV.display();
+    	*///////////////
+    }
+
+    public double[] getEigenvalues() {
+    	return null;
     }
 
     public static void main(String[] args) {
         double[][] m1 = {{1, 2, 4}, {3, 8, 14}, {2, 6, 14}};
+        double[] b = {1,1};
+        Vector g = new Vector(b);
+        System.out.println(g.magnitude());
         //double[][] m2 = {{1, -2, -2, -3}, {3, -9, 0, -9}, {-1, 2, 4, 7}, {-3, -6, 26, 2}};
         Matrix m = new Matrix(m1);
         //m.lu_decomposition();
@@ -454,7 +607,7 @@ public Matrix REF() {
         // System.out.println("***");
         // matrix6.display();
         m.display();
-        System.out.println(m.determinant());
+        m.power_method();
     }
 
 }
