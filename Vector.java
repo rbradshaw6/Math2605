@@ -44,7 +44,6 @@ public class Vector {
         for (int i = 0; i < length; i++) {
             sum[i] = vector[i] + v.vector[i];
         }
-<<<<<<< HEAD
         return new Vector(sum);
     }
     public Vector subtract(Vector v) {
