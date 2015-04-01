@@ -1,4 +1,4 @@
-It is justified to use LU or QR factorizations over finding 
+(i & ii)It is justified to use LU or QR factorizations over finding 
 the inverse matrix because sometimes the LU or QR factorizations
 can be more efficient. Though it may sacrifice accuracy, for time 
 sensitive computations it can be better to be quick than to be accurate.
