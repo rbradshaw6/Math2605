@@ -14,7 +14,7 @@ public class Matrix {
 
     protected int matrixRows;
     protected int matrixColumns;
-    
+
 
 
     public Matrix(double[][] matrix) { //assumes you pass in a consistent matrix
@@ -155,10 +155,25 @@ public class Matrix {
         }
 
         Matrix newMatrix = new Matrix(temp);
-        newMatrix.display();
-
         return newMatrix;
     }
+
+    public Matrix add(Matrix x) {
+        if (matrixRows != m.matrixRows || matrixColumns != m.matrixColumns) {
+            throw new IllegalArgumentException("Matrices must have same dimensions to add.");
+        }
+        double[][] temp = new double[matrixRows][matrixColumns];
+
+        for (int i = 0; i < matrixRows; i++) {
+            for (int j = 0; j < matrixColumns; j++) {
+                temp[i][j] = arrayVersion[i][j] + m.arrayVersion[i][j];
+            }
+        }
+
+        Matrix newMatrix = new Matrix(temp);
+        return newMatrix;
+    }
+
 
     private void display() {
         for (int i1 = 0; i1 < this.matrixRows; i1++) { //display
@@ -401,9 +416,9 @@ public Matrix REF() {
         l.inverse().display();
 
     }
-    
-    
-    //http://www.iaa.ncku.edu.tw/~dychiang/lab/program/mohr3d/source/Jama%5CQRDecomposition.html 
+
+
+    //http://www.iaa.ncku.edu.tw/~dychiang/lab/program/mohr3d/source/Jama%5CQRDecomposition.html
     public void qr_fact_househ() {
         double[] rd = new double[matrixColumns];
         double[][] QR = Matrix1;
@@ -412,7 +427,7 @@ public Matrix REF() {
            for(int j = i; j < matrixRows; j++) {
                k = Math.hypot(k, QR[j][i]);
            }
-           
+
            if (k != 0.0) {
                if (QR[i][i] < 0) {
                    k = -k;
@@ -421,10 +436,10 @@ public Matrix REF() {
                    QR[j][i] /= k;
                 }
                 QR[i][i] += 1.0;
-              
-               
+
+
                for (int l = i+1; l < matrixColumns; l++) {
-                   double s = 0.0; 
+                   double s = 0.0;
                    for (int j = i; j < matrixRows; j++) {
                       s += QR[j][i]*QR[j][l];
                    }
@@ -460,8 +475,8 @@ public Matrix REF() {
         System.out.println("Q is:");
         Matrix X = new Matrix(Q);
         X.display();
-        
-       
+
+
         double[][] R = new double[matrixColumns][matrixColumns];
         for (int i = 0; i < matrixColumns; i++) {
            for (int j = 0; j < matrixColumns; j++) {
@@ -476,60 +491,70 @@ public Matrix REF() {
         }
         System.out.println("R is:");
         R = arrayErrorFix(R);
+
         Matrix Y = new Matrix(R);
         Y.display();
-        
+
         Matrix answer = X.matrixMultiplier(Y);
-        answer = answer.matrixAdd(this.multiplyByConstant(-1));
+        //answer = answer.matrixAdd(this.multiplyByConstant(-1));
         double norm = answer.getNorm();
         System.out.println();
         System.out.println("Error is: ");
         System.out.println(norm);
 
-           
+
     }
     //http://stackoverflow.com/questions/13438073/qr-decomposition-algorithm-using-givens-rotations
     //http://portfolio.jrstrauss.net/portfolio-piece/qr-decomposition-via-givens-rotations/
 
     public void qr_fact_givens() {
- 
+
         int m = matrixRows;
         int n = matrixColumns;
         Matrix Q = createIdentity();
         Matrix G = createIdentity();
         Matrix A = new Matrix(Matrix1);
+<<<<<<< HEAD
  
-        for (int i=0; i<n; i++) {
+        for (int i=0; i < n; i++) {
                 for (int j=(n-1); j>i; j--) {                                       
                      
+=======
+
+        for (int i=0; i<n; i++) {
+                for (int j=(n-1); j>i; j--) {
+
+>>>>>>> origin/master
                     double a = Matrix1[j-1][i];
-                    double b = Matrix1[j][i];   
+                    double b = Matrix1[j][i];
                     double c = a/(Math.sqrt(a*a+b*b));
                     double s = b/(Math.sqrt(a*a+b*b));
-                     
+
                     G.Matrix1[j][j] = c;
                     G.Matrix1[j][j-1] = s;
                     G.Matrix1[j-1][j] = -s;
-                    G.Matrix1[j-1][j-1] = c;           
- 
+                    G.Matrix1[j-1][j-1] = c;
+
                     A = G.matrixMultiplier(A);
-               
-                     
+
+
                     Q = G.matrixMultiplier(Q);
-                     
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/master
                     G = G.createIdentity();
-                                
+
                 }
         }
-         
-         
+
+
         System.out.println("Q:");
         Q = Q.transpose();
         Q.display();
-         
+
         System.out.println("R:");
         A.display();
-         
         Matrix answer = Q.matrixMultiplier(A);
         answer = answer.matrixAdd(this.multiplyByConstant(-1));
         double norm = answer.getNorm();
@@ -568,21 +593,21 @@ public Matrix REF() {
             }
             return sum;
         }
-                
+
     }
-    
+
     public double getNorm() {
     	Matrix a = this;
     	Matrix b = this.transpose();
-    	
+
     	Matrix c = a.matrixMultiplier(b);
     	double yolo = c.trace();
     	double yolosqrt = Math.sqrt(yolo);
     	System.out.println("Norm of matrix:" + yolosqrt);
     	return yolosqrt;
-    	
+
     }
-    
+
     public double trace() {
     	double[][] matrix = this.arrayVersion;
     	double sum = 0;
@@ -595,59 +620,59 @@ public Matrix REF() {
     	}
     	return sum;
     }
-    
+
     public void power_method() {
     	Matrix matrix = this;
     	double[] randomVector = new double[matrixRows];
-    	
+
     	Random rand = new Random(); //creating the first random vector
     	for (int i = 0; i < matrixRows; i++) {
     		double randomValue = rand.nextDouble();
     		randomVector[i] = randomValue;
     	}
-    	
+
     	Vector[] steps = new Vector[10001];
-    	
+
     	double[] u = randomVector;
     	Vector uu = new Vector(u);
     	Vector mult = matrix.matrixVectorMult(uu);
     	double[] g = mult.vector;
     	steps[0] = mult.multiplyByConstant(1/g[0]);
-    	
+
     	for (int i = 0; i < 10000; i++) {
     			Vector lol = matrix.matrixVectorMult(steps[i]);
     			double[] lolz = lol.vector;
     			Vector what = lol.multiplyByConstant(1/steps[i].vector[0]);
     			steps[i + 1] = what;
     	}
-    	
+
     	steps[10000].display();
-    	
+
     	/*
 
     	Vector v = new Vector(randomVector);
     	Vector iterate = matrix.matrixVectorMult(v);
     	double[] b = iterate.vector;
     	*/
-    	
+
     	/*
-    	for (int i = 0; i < 10000; i++) {    		
+    	for (int i = 0; i < 10000; i++) {
     		double mag = iterate.magnitude();
-    		
+
     		for (int j = 0; j < b.length; j++) {
     			b[j] /= b[0];
     		}
     	}
-    	
+
     	Vector newV = new Vector(b);
     	newV.display();
     	*///////////////
     }
-    
+
     public double[] getEigenvalues() {
     	return null;
     }
-    
+
     private double[][] arrayErrorFix(double[][] array) {
         for(int i = 0; i < array.length; i++) {
             for(int j = 0; j < array[0].length; j++) {
@@ -656,7 +681,7 @@ public Matrix REF() {
                 }
             }
         }
-        
+
         return array;
     }
 
@@ -682,6 +707,6 @@ public Matrix REF() {
         //m.display();
         //m.power_method();
     }
- 
+
 
 }
