@@ -398,7 +398,50 @@ public Matrix REF() {
         u.display();
         System.out.println("L: ");
         l.inverse().display();
+        
+        
+        //getting error
+        Matrix actualL = l.inverse();
+        Matrix approxA = actualL.matrixMultiplier(u);
+        System.out.println("\n Computed A:");
+        approxA.display();
+        
+        System.out.println("\n LU - A:");
+        Matrix luminusA = approxA.subtraction(this);   
+        double error = luminusA.getInfinityNorm();
+        System.out.println("\ninfinity norm error (||LU - A||inf: " + error);
 
+    }
+    
+     public double getInfinityNorm() {
+    	double[][] matrix = this.arrayVersion;
+    	double max = 0;
+    	
+    	for (int i = 0; i < matrixRows; i++) {
+    		for (int j = 0; j < matrixColumns; j++) {
+    			if (Math.abs(matrix[i][j]) > max) {
+    				max = Math.abs(matrix[i][j]);
+    			}
+    		}
+    	}
+    	return max;
+    }
+    
+    public Matrix subtraction(Matrix b) {
+    	double[][] first = this.arrayVersion;
+    	double[][] second = b.arrayVersion;
+    	double[][] result = new double[matrixRows][matrixColumns];
+    	
+    	for (int i = 0; i < matrixRows; i++) {
+    		for (int j = 0; j < matrixColumns; j++) {
+    			result[i][j] = first[i][j] - second[i][j];
+    		}
+    	}
+    	
+    	Matrix resultant = new Matrix(result);
+    	resultant.display();
+    	return resultant;
+    	
     }
 
     public void qr_fact_househ() {
