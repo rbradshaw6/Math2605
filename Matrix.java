@@ -158,7 +158,7 @@ public class Matrix {
         return newMatrix;
     }
 
-    public Matrix add(Matrix x) {
+    public Matrix matrixAdd(Matrix m) {
         if (matrixRows != m.matrixRows || matrixColumns != m.matrixColumns) {
             throw new IllegalArgumentException("Matrices must have same dimensions to add.");
         }
@@ -514,17 +514,11 @@ public Matrix REF() {
         Matrix Q = createIdentity();
         Matrix G = createIdentity();
         Matrix A = new Matrix(Matrix1);
-<<<<<<< HEAD
- 
-        for (int i=0; i < n; i++) {
-                for (int j=(n-1); j>i; j--) {                                       
-                     
-=======
 
         for (int i=0; i<n; i++) {
                 for (int j=(n-1); j>i; j--) {
 
->>>>>>> origin/master
+
                     double a = Matrix1[j-1][i];
                     double b = Matrix1[j][i];
                     double c = a/(Math.sqrt(a*a+b*b));
@@ -539,10 +533,7 @@ public Matrix REF() {
 
 
                     Q = G.matrixMultiplier(Q);
-<<<<<<< HEAD
-=======
 
->>>>>>> origin/master
                     G = G.createIdentity();
 
                 }
