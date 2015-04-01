@@ -13,18 +13,20 @@ public class Leslie {
             u = newu;
             i++;
         }
-        System.out.println("Iterations:");
+        System.out.println("Iterations (max 10000):");
         System.out.println(i);
         System.out.println("Error:");
         System.out.println(diff);
         if (i == 10000) {
-            throw new IllegalArgumentException("Tolerance not reached. After 1000 iterations, error is:" + diff);
+            System.out.println("Tolerance not reached. After 10000 iterations, error is:" + diff);
         }
+        System.out.println("Final alpha value:");
+        u.display();
         return u.vector[0];
     }
 
-    public static Vector calcPop(Matrix a, Vector x, int years) {
-        for (int i = 0; i < years; i++) {
+    public static Vector calcPop(Matrix a, Vector x, int decades) {
+        for (int i = 0; i < decades; i++) {
             x = a.matrixVectorMult(x);
         }
         return x;
@@ -44,11 +46,9 @@ public class Leslie {
         double tol = Math.pow(10, -8);
         double[] x = {2.1, 1.9, 1.8, 2.1, 2.0, 1.7, 1.2, 0.9, 0.5};
         double[] bControl = {5.188, 4.445, 1.25, 1.453, 1.458, 1.663, 1.408, 1.047, 0.37};
-        Vector u0 = new Vector(bControl);
+        Vector u0 = new Vector(x);
         System.out.println("Power method:");
         double alpha = Leslie.power_method(leslie, tol, u0);
-        System.out.println("Alpha:");
-        System.out.println(alpha);
 
         System.out.println("\nPopulation in 2010:");
         calcPop(leslie, u0, 1).display();
