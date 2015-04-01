@@ -90,6 +90,10 @@ public class ConvoCodes {
 
             i++;
         }
+        if (i == 1000) {
+            throw new IllegalArgumentException("Tolerance not reached. After 1000 iteration, error is:" + ConvoCodes.calcError(a, x0, y));
+        }
+
         double[] finalArr = new double[length-3];
         for (int j = 0; j < finalArr.length; j++) {
             finalArr[j] = x0.vector[j];
@@ -127,6 +131,10 @@ public class ConvoCodes {
             }
             i++;
         }
+        if (i == 1000) {
+            throw new IllegalArgumentException("Tolerance not reached. After 1000 iterations, error is:" + ConvoCodes.calcError(a, x0, y));
+        }
+
         double[] finalArr = new double[length-3];
         for (int j = 0; j < finalArr.length; j++) {
             finalArr[j] = x0.vector[j];
@@ -141,7 +149,7 @@ public class ConvoCodes {
             b1.vector[i] = b1.vector[i] % 2;
         }
         Vector c = b.subtract(b1);
-        return c.norm();
+        return c.norm() / b.norm();
     }
 
     public static void main(String[] args) {
