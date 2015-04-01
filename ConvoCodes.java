@@ -21,6 +21,7 @@ public class ConvoCodes {
         for (int i = 0; i < v.length; i++) {
             v.vector[i] = v.vector[i] % 2;
         }
+        v.display();
         return v;
     }
 
@@ -43,6 +44,7 @@ public class ConvoCodes {
         for (int i = 0; i < v.length; i++) {
             v.vector[i] = v.vector[i] % 2;
         }
+        v.display();
         return v;
     }
 
@@ -145,7 +147,6 @@ public class ConvoCodes {
         plaintext.display();
         System.out.println("\n\n");
         Vector y0 = ConvoCodes.encodeY0(plaintext);
-        y0.display();
         System.out.println("\n\n");
 
         int length = y0.length;

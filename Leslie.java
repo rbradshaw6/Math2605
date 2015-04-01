@@ -21,7 +21,6 @@ public class Leslie {
             System.out.println("Tolerance not reached. After 10000 iterations, error is:" + diff);
         }
         System.out.println("Final alpha value:");
-        u.display();
         return u.vector[0];
     }
 
@@ -29,6 +28,8 @@ public class Leslie {
         for (int i = 0; i < decades; i++) {
             x = a.matrixVectorMult(x);
         }
+        System.out.println("Population after " + decades + " deades:");
+        x.display();
         return x;
     }
 
@@ -50,16 +51,11 @@ public class Leslie {
         System.out.println("Power method:");
         double alpha = Leslie.power_method(leslie, tol, u0);
 
-        System.out.println("\nPopulation in 2010:");
-        calcPop(leslie, u0, 1).display();
-        System.out.println("\nPopulation in 2020:");
-        calcPop(leslie, u0, 2).display();
-        System.out.println("\nPopulation in 2030:");
-        calcPop(leslie, u0, 3).display();
-        System.out.println("\nPopulation in 2040:");
-        calcPop(leslie, u0, 4).display();
-        System.out.println("\nPopulation in 2050:");
-        calcPop(leslie, u0, 5).display();
+        calcPop(leslie, u0, 1);
+        calcPop(leslie, u0, 2);
+        calcPop(leslie, u0, 3);
+        calcPop(leslie, u0, 4);
+        calcPop(leslie, u0, 5);
 
 
     }
