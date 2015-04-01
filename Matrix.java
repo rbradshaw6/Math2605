@@ -573,22 +573,20 @@ public Matrix REF() {
                
                      
                     Q = Gn.matrixMultiplier(Q);
- 
-                    // Turning the Gn matrix back into the identity.
                      
                     Gn = Gn.createIdentity();
                                 
-                }//end j    
-        }//end i
+                }
+        }
          
          
         System.out.println("Q:");
+        Q = Q.transpose();
         Q.display();
          
         System.out.println("R:");
         A.display();
          
-        Q = Q.transpose();
         Matrix answer = Q.matrixMultiplier(A);
         System.out.println("Did it work? Q x R:");
         answer.display();
@@ -725,7 +723,7 @@ public Matrix REF() {
     }
 
     public static void main(String[] args) {
-        double[][] m1 = {{1, 1}, {1, 2}};
+        double[][] m1 = {{1, 1, 1}, {1, 2, 3}, {1, 3, 6}};
        // double[] b = {1,1};
        // Vector g = new Vector(b);
         //System.out.println(g.magnitude());
