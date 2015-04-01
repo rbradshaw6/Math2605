@@ -522,7 +522,7 @@ public Matrix REF() {
                     double a = Matrix1[j-1][i];
                     double b = Matrix1[j][i];
                     double c = a/(Math.sqrt(a*a+b*b));
-                    double s = b/(Math.sqrt(a*a+b*b));
+                    double s = -b/(Math.sqrt(a*a+b*b));
 
                     G.Matrix1[j][j] = c;
                     G.Matrix1[j][j-1] = s;
@@ -677,7 +677,7 @@ public Matrix REF() {
     }
 
     public static void main(String[] args) {
-        double[][] m1 = {{1, 1, 1}, {1, 2, 3}, {1, 3, 6}};
+        double[][] m1 = {{1, 1}, {1, 2}};
        // double[] b = {1,1};
        // Vector g = new Vector(b);
         //System.out.println(g.magnitude());
