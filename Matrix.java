@@ -12,8 +12,8 @@ public class Matrix {
     protected Matrix U;
     protected double[][] identity;
 
-    private int matrixRows;
-    private int matrixColumns;
+    protected int matrixRows;
+    protected int matrixColumns;
 
     public Matrix(double[][] matrix) { //assumes you pass in a consistent matrix
         this.arrayVersion = matrix; //for passing into different methods
