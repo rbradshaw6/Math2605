@@ -21,6 +21,7 @@ public class Leslie {
             System.out.println("Tolerance not reached. After 10000 iterations, error is:" + diff);
         }
         System.out.println("Final alpha value:");
+        System.out.println(u.vector[0]);
         return u.vector[0];
     }
 
@@ -34,7 +35,7 @@ public class Leslie {
     }
 
     public static void main(String[] args) {
-        double[][] a = {{0, 0.6, 1.1, .9, .1, 0, 0, 0, 0},
+        double[][] a = {{0, 1.2, 1.1, .9, .1, 0, 0, 0, 0},
                 {.7, 0, 0, 0, 0, 0, 0, 0, 0},
                 {0, .85, 0, 0, 0, 0, 0, 0, 0},
                 {0, 0, .9, 0, 0, 0, 0, 0, 0},
