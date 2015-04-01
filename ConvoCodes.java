@@ -75,23 +75,10 @@ public class ConvoCodes {
                 x0.vector[k] = Math.abs(x0.vector[k] % 2);
             }
 
-            // double[] newx = new double[x.length];
-            // for (int j = 0; j < newx.length; j++) {
-            //     double sum = 0;
-            //     for (int k = 0; k < encryptionArray[j].length; k++) {
-            //         if (j != k) {
-            //             sum += encryptionArray[j][k] * x.vector[j]
-            //         }
-            //     }
-            //     newx[j] = (y.vector[j] - sum) / encryptionArray[j][j];
-            // }
-            // x = new Vector(newx);
-
-
             i++;
         }
         if (i == 1000) {
-            throw new IllegalArgumentException("Tolerance not reached. After 1000 iteration, error is:" + ConvoCodes.calcError(a, x0, y));
+            System.out.println("Tolerance not reached. After 1000 iteration, error is:" + ConvoCodes.calcError(a, x0, y));
         }
 
         double[] finalArr = new double[length-3];
@@ -132,7 +119,7 @@ public class ConvoCodes {
             i++;
         }
         if (i == 1000) {
-            throw new IllegalArgumentException("Tolerance not reached. After 1000 iterations, error is:" + ConvoCodes.calcError(a, x0, y));
+            System.out.println("Tolerance not reached. After 1000 iterations, error is:" + ConvoCodes.calcError(a, x0, y));
         }
 
         double[] finalArr = new double[length-3];
