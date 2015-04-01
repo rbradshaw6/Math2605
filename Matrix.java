@@ -321,7 +321,7 @@ public Matrix REF() {
         return neo;
     }
 
-    public void lu_decomposition() {
+    public void lu_fact() {
         double[][] matrix = this.arrayVersion;
         double[][] Larr = new double[matrixRows][matrixRows];
 
