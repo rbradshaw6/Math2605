@@ -12,8 +12,8 @@ public class Matrix {
     protected Matrix U;
     protected double[][] identity;
 
-    private int matrixRows;
-    private int matrixColumns;
+    protected int matrixRows;
+    protected int matrixColumns;
     
 
 
