@@ -476,85 +476,28 @@ public Matrix REF() {
         }
         System.out.println("R is:");
         R = arrayErrorFix(R);
-        X = new Matrix(R);
-        X.display();
+        Matrix Y = new Matrix(R);
+        Y.display();
+        
+        Matrix answer = X.matrixMultiplier(Y);
+        answer = answer.matrixAdd(this.multiplyByConstant(-1));
+        double norm = answer.getNorm();
+        System.out.println();
+        System.out.println("Error is: ");
+        System.out.println(norm);
+
            
     }
     //http://stackoverflow.com/questions/13438073/qr-decomposition-algorithm-using-givens-rotations
+    //http://portfolio.jrstrauss.net/portfolio-piece/qr-decomposition-via-givens-rotations/
+
     public void qr_fact_givens() {
-        int m = matrixRows;
-        int n = matrixColumns;
-        Matrix Q = createIdentity();
-        Matrix R = this;
-        
-        for (int j = 0; j < n; j++) {
-            for(int i = (m - 1); i > j; i--) {
-                Matrix G = createIdentity();
-                double c = givensC(R.Matrix1[i - 1][j], R.Matrix1[i][j]);
-                double s = givensS(R.Matrix1[i - 1][j], R.Matrix1[i][j]);
-                G.Matrix1[i-1][i-1] = c;
-                G.Matrix1[i-1][i] = -s;
-                G.Matrix1[i][i-1] = s;
-                G.Matrix1[i][i] = c;
-                Q = Q.matrixMultiplier(G);
-                R = G.matrixMultiplier(R);
-                
-                
-            }
-
-        }
-        
-        System.out.println("Q is:");
-        Q.display();
-        System.out.println("R is:");
-        R.display();
-    }
-    
-    
-    private double givensC(double a, double b) {
-        if (b == 0) {
-            return 1;
-        } else {
-            if (Math.abs(b) > Math.abs(a)) {
-                double r = a / b;
-                double s = 1 / Math.sqrt(1 + Math.pow(r, 2));
-                return s*r;
-                
-            } else {
-                double r = b / a;
-                return 1/ Math.sqrt(1 + Math.pow(r, 2));
-            }
-           
-        }
-    }
-
-    private double givensS(double a, double b) {
-        if (b == 0) {
-            return 0;
-        } else {
-            if (Math.abs(b) > Math.abs(a)) {
-                double r = a / b;
-                return 1 / Math.sqrt(1 + Math.pow(r, 2));
-                
-            } else {
-                double r = b / a;
-                double c = 1/ Math.sqrt(1 + Math.pow(r, 2));
-                return c * r;
-            }
-           
-        }
-    }
-
-    public void qr_given() {
  
         int m = matrixRows;
         int n = matrixColumns;
         Matrix Q = createIdentity();
-        Matrix Gn = createIdentity();
+        Matrix G = createIdentity();
         Matrix A = new Matrix(Matrix1);
-         
-         
-        // The for loops that begin the Givens rotation matrices.
  
         for (int i=0; i<n; i++) {
                 for (int j=(n-1); j>i; j--) {                                       
@@ -562,19 +505,19 @@ public Matrix REF() {
                     double a = Matrix1[j-1][i];
                     double b = Matrix1[j][i];   
                     double c = a/(Math.sqrt(a*a+b*b));
-                    double s = -b/(Math.sqrt(a*a+b*b));
+                    double s = b/(Math.sqrt(a*a+b*b));
                      
-                    Gn.Matrix1[j][j] = c;
-                    Gn.Matrix1[j][j-1] = s;
-                    Gn.Matrix1[j-1][j] = -s;
-                    Gn.Matrix1[j-1][j-1] = c;           
+                    G.Matrix1[j][j] = c;
+                    G.Matrix1[j][j-1] = s;
+                    G.Matrix1[j-1][j] = -s;
+                    G.Matrix1[j-1][j-1] = c;           
  
-                    A = Gn.matrixMultiplier(A);
+                    A = G.matrixMultiplier(A);
                
                      
-                    Q = Gn.matrixMultiplier(Q);
+                    Q = G.matrixMultiplier(Q);
                      
-                    Gn = Gn.createIdentity();
+                    G = G.createIdentity();
                                 
                 }
         }
@@ -588,17 +531,12 @@ public Matrix REF() {
         A.display();
          
         Matrix answer = Q.matrixMultiplier(A);
-        System.out.println("Did it work? Q x R:");
-        answer.display();
-        /*
-        // Calculating the maximum norm of QR-H.
-         
-        answer = subtractMatrix(answer, Hilbert);
-        double maxNorm = normOfInfinity(answer);
+        answer = answer.matrixAdd(this.multiplyByConstant(-1));
+        double norm = answer.getNorm();
         System.out.println();
-        System.out.println("The maximum norm of QR - H:");
-        System.out.println(maxNorm);
-        */
+        System.out.println("Error is: ");
+        System.out.println(norm);
+
     }
 
     public double determinant() {
@@ -740,7 +678,7 @@ public Matrix REF() {
         // Matrix matrix6 = matrix5.inverse();
         // System.out.println("***");
         // matrix6.display();
-        m.qr_given();
+        m.qr_fact_givens();
         //m.display();
         //m.power_method();
     }
